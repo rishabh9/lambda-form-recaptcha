@@ -1,3 +1,4 @@
 {
-  "captchaSiteSecret": ""
+  "captchaSiteSecret": "your-recaptcha-secret-key-here",
+  "sendMailsTo": "form.data@example.com"
 }

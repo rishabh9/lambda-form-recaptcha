@@ -1,0 +1,27 @@
+{
+  "name": "form-recaptcha",
+  "version": "0.1.0",
+  "description": "This projects runs on Serverless platform. Currently configured to run on AWS Lambda. It accepts form submission fortified using recaptcha, and then emails the form content to the configured email address.",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "serverless",
+    "aws",
+    "lambda",
+    "form",
+    "recaptcha"
+  ],
+  "author": {
+    "name": "Rishabh Joshi",
+    "email": "mailbox@rishabh.me"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.83.0"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.176.0"
+  }
+}
