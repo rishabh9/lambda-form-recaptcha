@@ -8,7 +8,6 @@ const AWS     = require('aws-sdk');
 var sesClient = new AWS.SES();
 
 module.exports.form = (event, context, callback) => {
-  console.log(event);
 
   var formData = qs.parse(event.body);
 
@@ -23,11 +22,11 @@ module.exports.form = (event, context, callback) => {
         }
     }, 
     function(error, httpResponse, body) {
-      console.log("httpResponse: " + httpResponse);
-      console.log("body: " + JSON.parse(body));
-      console.log("error: " + error);
+      var jsonBody = JSON.parse(body);
+      console.log("Recaptcha response: %j", jsonBody);
+      console.log("error: %j", error);
 
-      if (!error && httpResponse.statusCode == 200 && JSON.parse(body).success) {
+      if (!error && httpResponse.statusCode == 200 && jsonBody.success) {
 
         console.log("Recaptcha verified!");
         console.log("Now sending email...");
@@ -52,7 +51,7 @@ module.exports.form = (event, context, callback) => {
         
         sesClient.sendEmail(emailParams, function (err, data) {
           if (err) {
-            console.log("An error occurred while sending the email. Error: " + err);
+            console.log("An error occurred while sending the email. Error: %j", err);
             callback(null, {"success": false, "message": "An error occurred sending the email!", "error": err});
           } else {
             console.log("Email sent successfully!");
@@ -61,7 +60,7 @@ module.exports.form = (event, context, callback) => {
         });
 
       } else {
-        console.log("Error verifying recaptcha. Response was: " + body);
+        console.log("Error verifying Recaptcha!");
         callback(null, {"success": false, "message": "Error verifying recaptcha. You might be a robot!", "error": error});
       }
     }
