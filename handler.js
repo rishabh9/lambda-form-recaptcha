@@ -22,14 +22,13 @@ module.exports.form = (event, context, callback) => {
         }
     }, 
     function(error, httpResponse, body) {
-      var jsonBody = JSON.parse(body);
-      console.log("Recaptcha response: %j", jsonBody);
+      var recaptchaResponse = JSON.parse(body);
+      console.log("Recaptcha response: %j", recaptchaResponse);
       console.log("error: %j", error);
 
-      if (!error && httpResponse.statusCode == 200 && jsonBody.success) {
+      if (!error && httpResponse.statusCode == 200 && recaptchaResponse.success) {
 
-        console.log("Recaptcha verified!");
-        console.log("Now sending email...");
+        console.log("Recaptcha verified! Now sending email...");
 
         var emailParams = {
           "Destination": {
@@ -52,18 +51,26 @@ module.exports.form = (event, context, callback) => {
         sesClient.sendEmail(emailParams, function (err, data) {
           if (err) {
             console.log("An error occurred while sending the email. Error: %j", err);
-            callback(null, {"success": false, "message": "An error occurred sending the email!", "error": err});
+            callback(null, prepareResponse(false, "An error occurred while sending the email.", err));
           } else {
             console.log("Email sent successfully!");
-            callback(null, {"success": true});
+            callback(null, prepareResponse(true, "Your message was successfully submitted.", null));
           }
         });
 
       } else {
         console.log("Error verifying Recaptcha!");
-        callback(null, {"success": false, "message": "Error verifying recaptcha. You might be a robot!", "error": error});
+        callback(null, prepareResponse(false, "Error verifying recaptcha.", recaptchaResponse));
       }
     }
   );
   
+};
+
+var prepareResponse = (success, message, error) => {
+  var statusCode = success ? 200 : 500;
+  return {
+    "statusCode": statusCode,
+    "body": JSON.stringify({ "success": success, "message": message, "error": error })
+  };
 };
