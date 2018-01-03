@@ -41,7 +41,7 @@ module.exports.form = (event, context, callback) => {
               }
             },
             "Subject": {
-              "Data": formData['name'] + " has left you a message on www.rishabh.me"
+              "Data": formData['name'] + " has left you a message"
             }
           },
           "Source": config.sendMailsTo,
@@ -50,17 +50,17 @@ module.exports.form = (event, context, callback) => {
         
         sesClient.sendEmail(emailParams, function (err, data) {
           if (err) {
-            console.log("An error occurred while sending the email. Error: %j", err);
-            callback(null, prepareResponse(false, "An error occurred while sending the email.", err));
+            console.log("An error occurred while sending the message. Error: %j", err);
+            callback(null, prepareResponse(false, "An error occurred while sending your message.", err));
           } else {
             console.log("Email sent successfully!");
-            callback(null, prepareResponse(true, "Your message was successfully submitted.", null));
+            callback(null, prepareResponse(true, "Thank You! Your message has been sent.", null));
           }
         });
 
       } else {
         console.log("Error verifying Recaptcha!");
-        callback(null, prepareResponse(false, "Error verifying recaptcha.", recaptchaResponse));
+        callback(null, prepareResponse(false, "An error occurred while verifying Recaptcha.", recaptchaResponse));
       }
     }
   );
@@ -71,6 +71,10 @@ var prepareResponse = (success, message, error) => {
   var statusCode = success ? 200 : 500;
   return {
     "statusCode": statusCode,
+    "headers": {
+        "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
+        "Access-Control-Allow-Credentials" : false // Required for cookies, authorization headers with HTTPS
+      },
     "body": JSON.stringify({ "success": success, "message": message, "error": error })
   };
 };

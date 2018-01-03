@@ -19,6 +19,7 @@ service: form-recaptcha
 
 provider:
   name: aws
+  region: us-east-1
   runtime: nodejs6.10
   profile: serverless
   iamRoleStatements:
@@ -71,7 +72,19 @@ functions:
     - http:
         path: form
         method: post
-        cors: true
+        cors:
+          origin: '*'
+          headers:
+            - Content-Type
+            - X-Amz-Date
+            - Authorization
+            - X-Api-Key
+            - X-Amz-Security-Token
+            - X-Amz-User-Agent
+          methods:
+            - OPTIONS
+            - POST
+          allowCredentials: false
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
