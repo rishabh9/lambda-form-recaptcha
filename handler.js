@@ -22,7 +22,7 @@ module.exports.form = (event, context, callback) => {
   }
   if (!formData['g-recaptcha-response']) {
     console.error("Recaptcha response not provided");
-    return callback(null, prepareErrorResponse("Recaptcha response not provided"));
+    return callback(null, prepareErrorResponse("You seem to be a bot!"));
   }
   if (!formData['name']) {
     console.error("Name not provided");
