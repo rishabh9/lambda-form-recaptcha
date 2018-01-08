@@ -1,0 +1,19 @@
+<html>
+<head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="{{ 'scripts.js' | prepend: site.baseurl }}"></script>
+<script src='//www.google.com/recaptcha/api.js'></script>
+</head>
+<body>
+<form id="recaptcha-contact" action="" method="POST">
+  <div id="form-messages" class="error"></div>
+  <label for="name" class="req">Name</label>
+  <input required type="text" id="name" name="name" class="full-width"><br>
+  <label for="email" class="req">Email Address</label>
+  <input required type="email" id="email" name="_replyto" class="full-width"><br>
+  <label for="message" class="req">Message</label>
+  <textarea required name="message" id="message" cols="30" rows="10" class="full-width"></textarea><br>
+  <input type="submit" value="Send" class="button">
+</form>
+</body>
+</html>
